@@ -10,3 +10,6 @@ test/setup/elasticsearch/elasticsearch-*
 vendor
 .DS_Store
 data/*
+.sass-cache/d5c1e6a37c252b187d8200d771dc268256dc06f4/style.sassc
+agent.conf
+log4j.properties
