@@ -33,6 +33,7 @@ class LogStash::Runner
     @runners = []
     while !args.empty?
       #p :args => args
+      puts "args left: #{args.inspect}"
       args = run(args)
     end
 
@@ -81,9 +82,7 @@ class LogStash::Runner
         require "logstash/fetch"
         fetch = LogStash::Fetch.new
         @runners << fetch
-        r = fetch.run(args)
-        puts "R #{r.inspect}"
-        return r
+        return fetch.run(args)
       end
     } # commands
 
