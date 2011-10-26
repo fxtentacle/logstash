@@ -9,3 +9,4 @@ local
 test/setup/elasticsearch/elasticsearch-*
 vendor
 .DS_Store
+data/*
