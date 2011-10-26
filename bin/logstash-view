@@ -1,0 +1,8 @@
+#!/usr/bin/env jruby --1.9
+
+$: << File.dirname($0) + "/../lib"
+
+require "rubygems"
+require "logstash/runner"
+
+LogStash::Runner.new.main(["view"])
