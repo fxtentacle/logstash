@@ -47,6 +47,9 @@ class LogStash::Outputs::ElasticSearch < LogStash::Outputs::Base
   # a separate elasticsearch process.
   config :embedded, :validate => :boolean, :default => false
 
+  # Run the embedded elasticsearch server in local mode?
+  config :local, :validate => :boolean, :default => true
+
   # If you are running the embedded elasticsearch server, you can set the http
   # port it listens on here; it is not common to need this setting changed from
   # default.
@@ -111,7 +114,7 @@ class LogStash::Outputs::ElasticSearch < LogStash::Outputs::Base
   def start_local_elasticsearch
     @logger.info("Starting embedded ElasticSearch local node.")
     builder = org.elasticsearch.node.NodeBuilder.nodeBuilder
-#    builder.local(true)
+    builder.local(@local)
     builder.settings.put("http.port", @embedded_http_port)
 
     @embedded_elasticsearch = builder.node
