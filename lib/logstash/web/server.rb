@@ -18,6 +18,8 @@ require "logstash/web/helpers/require_param"
 require "optparse"
 require "rack" # gem rack
 require "sinatra/base" # gem sinatra
+require "haml" # gem haml
+require "sass" # gem haml / gem sass
 
 class LogStash::Web::Server < Sinatra::Base
 
