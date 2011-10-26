@@ -76,6 +76,14 @@ class LogStash::Runner
         test = LogStash::Test.new
         @runners << test
         return test.run(args)
+      end,
+      "fetch" => lambda do
+        require "logstash/fetch"
+        fetch = LogStash::Fetch.new
+        @runners << fetch
+        r = fetch.run(args)
+        puts "R #{r.inspect}"
+        return r
       end
     } # commands
 
