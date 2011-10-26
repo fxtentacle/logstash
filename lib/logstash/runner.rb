@@ -87,7 +87,7 @@ class LogStash::Runner
         require "logstash/web/runner"
         web = LogStash::Web::Runner.new
         @runners << web
-        web.run(["--backend","elasticsearch://127.0.0.1:9300/elasticsearch"])
+        web.run(["--backend","elasticsearch://127.0.0.1:9301/elasticsearch"])
         
         require "logstash/agent"
         agent = LogStash::Agent.new
