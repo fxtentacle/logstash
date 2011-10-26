@@ -1,4 +1,4 @@
-#!/usr/bin/env jruby
+#!/usr/bin/env jruby --1.9
 
 $: << File.dirname($0) + "/../lib"
 
