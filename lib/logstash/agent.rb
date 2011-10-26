@@ -44,6 +44,7 @@ class LogStash::Agent
     # flag/config defaults
     @verbose = 0
     @daemonize = false
+    @run_until_idle = false
 
     @plugins = {}
     @plugins_mutex = Mutex.new
@@ -88,6 +89,10 @@ class LogStash::Agent
 
     opts.on("-d", "--daemonize", "Daemonize (default is run in foreground)") do
       @daemonize = true
+    end
+
+    opts.on("-c", "--cronjob", "Fetch all queued messages once, then quit.") do
+      @run_until_idle = true
     end
 
     opts.on("-l", "--log FILE", "Log to a given path. Default is stdout.") do |path|
@@ -432,8 +437,27 @@ class LogStash::Agent
     # like tests, etc.
     yield if block_given?
 
-    # TODO(sissel): Monitor what's going on? Sleep forever? what?
-    while sleep 5
+    # HAJO's idle watch
+    if @run_until_idle
+      @logger.info("Hajo's run until idle")
+      idle_watch_queue = SizedQueue.new(10)
+      @output_queue.add_queue(idle_watch_queue)
+      last_action_time = Time.now
+      while sleep 1
+        current_time = Time.now
+        if idle_watch_queue.empty?
+          if (current_time-last_action_time) > 10
+            shutdown
+          end
+        else
+          idle_watch_queue.clear
+          last_action_time = current_time
+        end
+      end
+    else
+      # TODO(sissel): Monitor what's going on? Sleep forever? what?
+      while sleep 5
+      end
     end
   end # def run_with_config
 
