@@ -1,6 +1,5 @@
 require "logstash/agent"
 require 'rubygems'   
-require 'net/ssh/gateway'
 
 class LogStash::Fetch < LogStash::Agent
   public
