@@ -102,12 +102,13 @@ class LogStash::Inputs::Amqp < LogStash::Inputs::Base
       @bunny = Bunny.new(@amqpsettings)
       return if terminating?
       @bunny.start
+      @bunny.qos(:prefetch_count => 500)
 
       @queue = @bunny.queue(@queue_name, :durable => @queue_durable)
       exchange = @bunny.exchange(@name, :type => @exchange_type.to_sym, :durable => @durable)
       @queue.bind(exchange, :key => @key)
 
-      @queue.subscribe do |data|
+      @queue.subscribe(:ack => true) do |data|
         e = to_event(data[:payload], @amqpurl)
         if e
           queue << e
