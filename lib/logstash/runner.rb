@@ -33,7 +33,6 @@ class LogStash::Runner
     @runners = []
     while !args.empty?
       #p :args => args
-      puts "args left: #{args.inspect}"
       args = run(args)
     end
 
@@ -83,6 +82,20 @@ class LogStash::Runner
         fetch = LogStash::Fetch.new
         @runners << fetch
         return fetch.run(args)
+      end,
+      "view" => lambda do
+        require "logstash/web/runner"
+        web = LogStash::Web::Runner.new
+        @runners << web
+        web.run(["--backend","elasticsearch://127.0.0.1:9300/elasticsearch"])
+        
+        require "logstash/agent"
+        agent = LogStash::Agent.new
+        @runners << agent
+        sleep 1
+        agent.run(["--configstring","output { elasticsearch { embedded => true \n local => false } }"])
+        
+        return []
       end
     } # commands
 
