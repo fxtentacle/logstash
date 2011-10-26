@@ -22,6 +22,18 @@ class LogStash::Search::ElasticSearch < LogStash::Search::Base
                                         :cluster => @cluster, 
                                         :bind_host => @bind_host,
                                         :type => @type)
+                                        
+
+    if settings[:verbose] >= 3  # Uber debugging.
+      @logger.level = :debug
+    elsif settings[:verbose] == 2 # logstash debug logs
+      @logger.level = :debug
+    elsif settings[:verbose] == 1 # logstash info logs
+      @logger.level = :info
+    else # Default log level
+      @logger.level = :warn
+    end
+
   end
 
   # See LogStash::Search;:Base#search

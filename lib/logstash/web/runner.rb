@@ -3,7 +3,7 @@ require "mizuno" # gem mizuno
 
 class LogStash::Web::Runner
   Settings = Struct.new(:daemonize, :logfile, :address, :port,
-                        :backend_url, :bind_host)
+                        :backend_url, :bind_host, :verbose)
 
   public
   def run(args)
@@ -22,6 +22,7 @@ class LogStash::Web::Runner
     settings.address = "0.0.0.0"
     settings.port = 9292
     settings.backend_url = "elasticsearch:///"
+    settings.verbose = 0
 
     progname = File.basename($0)
 
@@ -54,6 +55,11 @@ class LogStash::Web::Runner
               "elasticsearch://[host][:port]/[clustername]") do |url|
         settings.backend_url = url
       end
+      
+      opts.on("-v", "Increase verbosity") do
+        settings.verbose += 1
+      end
+      
     end
 
     args = opts.parse(args)
@@ -78,7 +84,7 @@ class LogStash::Web::Runner
       STDOUT.reopen(devnull)
       STDERR.reopen(devnull)
     end
-
+    
     @thread = Thread.new do
       Mizuno::HttpServer.run(
         LogStash::Web::Server.new(settings),

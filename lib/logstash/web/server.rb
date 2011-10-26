@@ -72,6 +72,7 @@ class LogStash::Web::Server < Sinatra::Base
           :port => backend_url.port,
           :cluster => cluster_name,
           :bind_host => settings.bind_host,
+          :verbose => settings.verbose,
         }
         query = backend_url.query
         if !(query.nil? or query.empty?)
