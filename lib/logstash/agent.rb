@@ -79,7 +79,7 @@ class LogStash::Agent
       @config_path = arg
     end # -f / --config
 
-    opts.on("-e CONFIGSTRING",
+    opts.on("-e CONFIGSTRING",  "--configstring CONFIGSTRING",
             "Use the given string as the configuration data. Same syntax as " \
             "the config file. If not input is specified, " \
             "'stdin { type => stdin }' is default. If no output is " \
